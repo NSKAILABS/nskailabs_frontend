@@ -11,37 +11,42 @@ interface User {
   email: string;
   first_name: string;
   last_name: string;
-  is_google_user?: boolean;
-  avatar_url?: string;
+  profile?: {
+    bio: string;
+    institution: string;
+    department: string;
+    research_interests: string[];
+    website: string;
+    google_scholar: string;
+    orcid: string;
+    avatar_url: string;
+    twitter: string;
+    linkedin: string;
+    is_contributor: boolean;
+  };
 }
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (username: string, password: string) => Promise<{ ok: boolean; error?: string }>;
-  register: (data: RegisterData) => Promise<{ ok: boolean; error?: string }>;
-  googleAuth: (credential: string) => Promise<{ ok: boolean; error?: string }>;
-  sendOTP: (email: string, otpType: 'registration' | 'login') => Promise<{ ok: boolean; error?: string }>;
-  verifyOTP: (data: OTPVerifyData) => Promise<{ ok: boolean; error?: string }>;
-  logout: () => void;
+  requestMagicLink: (email: string) => Promise<{ ok: boolean; error?: string }>;
+  verifyMagicLink: (token: string) => Promise<{ ok: boolean; error?: string; isNewUser?: boolean }>;
+  updateProfile: (data: ProfileUpdateData) => Promise<{ ok: boolean; error?: string }>;
+  logout: () => Promise<void>;
 }
 
-interface RegisterData {
-  username: string;
-  email: string;
-  password: string;
-  password_confirm: string;
-  first_name: string;
-  last_name: string;
-}
-
-interface OTPVerifyData {
-  email: string;
-  otp: string;
-  otp_type: 'registration' | 'login';
-  username?: string;
+interface ProfileUpdateData {
   first_name?: string;
   last_name?: string;
+  bio?: string;
+  institution?: string;
+  department?: string;
+  research_interests?: string[];
+  website?: string;
+  google_scholar?: string;
+  orcid?: string;
+  twitter?: string;
+  linkedin?: string;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -52,27 +57,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const fetchUser = useCallback(async (token: string) => {
     try {
-      let res = await fetch(`${API_URL}/api/auth/me/`, {
+      let res = await fetch(`${API_URL}/api/auth/user/`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      
       if (res.status === 401) {
         const newToken = await refreshAccessToken();
         if (newToken) {
-          res = await fetch(`${API_URL}/api/auth/me/`, {
+          res = await fetch(`${API_URL}/api/auth/user/`, {
             headers: { Authorization: `Bearer ${newToken}` },
           });
         }
       }
+      
       if (res.ok) {
         const data = await res.json();
         setUser(data);
       } else {
         localStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
+        setUser(null);
       }
     } catch {
       localStorage.removeItem("access_token");
       localStorage.removeItem("refresh_token");
+      setUser(null);
     } finally {
       setLoading(false);
     }
@@ -90,12 +99,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   async function refreshAccessToken(): Promise<string | null> {
     const refresh = localStorage.getItem("refresh_token");
     if (!refresh) return null;
+    
     try {
       const res = await fetch(`${API_URL}/api/auth/refresh/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ refresh }),
       });
+      
       if (res.ok) {
         const data = await res.json();
         localStorage.setItem("access_token", data.access);
@@ -110,35 +121,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return null;
   }
 
-  async function login(username: string, password: string) {
+  async function requestMagicLink(email: string) {
     try {
-      const res = await fetch(`${API_URL}/api/auth/login/`, {
+      const res = await fetch(`${API_URL}/api/auth/request-magic-link/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ email }),
       });
 
       if (res.ok) {
-        const data = await res.json();
-        localStorage.setItem("access_token", data.access);
-        localStorage.setItem("refresh_token", data.refresh);
-        await fetchUser(data.access);
         return { ok: true };
       } else {
         const data = await res.json().catch(() => null);
-        return { ok: false, error: data?.detail || "Invalid credentials." };
+        return { ok: false, error: data?.error || data?.email?.[0] || "Failed to send magic link." };
       }
     } catch {
       return { ok: false, error: "Network error. Please try again." };
     }
   }
 
-  async function register(formData: RegisterData) {
+  async function verifyMagicLink(token: string) {
     try {
-      const res = await fetch(`${API_URL}/api/auth/register/`, {
+      const res = await fetch(`${API_URL}/api/auth/verify-magic-link/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ token }),
       });
 
       if (res.ok) {
@@ -146,94 +153,72 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         localStorage.setItem("access_token", data.tokens.access);
         localStorage.setItem("refresh_token", data.tokens.refresh);
         setUser(data.user);
-        return { ok: true };
+        return { ok: true, isNewUser: data.is_new_user };
       } else {
         const data = await res.json().catch(() => null);
-        const firstError = data
-          ? Object.values(data).flat().join(" ")
-          : "Registration failed.";
-        return { ok: false, error: firstError };
+        return { ok: false, error: data?.error || "Invalid or expired magic link." };
       }
     } catch {
       return { ok: false, error: "Network error. Please try again." };
     }
   }
 
-  async function googleAuth(credential: string) {
+  async function updateProfile(profileData: ProfileUpdateData) {
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+      return { ok: false, error: "Not authenticated." };
+    }
+
     try {
-      const res = await fetch(`${API_URL}/api/auth/google/`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ credential }),
+      const res = await fetch(`${API_URL}/api/auth/profile/`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(profileData),
       });
 
       if (res.ok) {
         const data = await res.json();
-        localStorage.setItem("access_token", data.tokens.access);
-        localStorage.setItem("refresh_token", data.tokens.refresh);
-        setUser(data.user);
+        setUser(data);
         return { ok: true };
       } else {
         const data = await res.json().catch(() => null);
-        return { ok: false, error: data?.error || "Google authentication failed." };
+        return { ok: false, error: data?.error || "Failed to update profile." };
       }
     } catch {
       return { ok: false, error: "Network error. Please try again." };
     }
   }
 
-  async function sendOTP(email: string, otpType: 'registration' | 'login') {
-    try {
-      const res = await fetch(`${API_URL}/api/auth/otp/send/`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, otp_type: otpType }),
-      });
-
-      if (res.ok) {
-        return { ok: true };
-      } else {
-        const data = await res.json().catch(() => null);
-        return { ok: false, error: data?.error || "Failed to send OTP." };
+  async function logout() {
+    const token = localStorage.getItem("access_token");
+    const refresh = localStorage.getItem("refresh_token");
+    
+    // Call logout endpoint to blacklist the refresh token
+    if (token && refresh) {
+      try {
+        await fetch(`${API_URL}/api/auth/logout/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ refresh }),
+        });
+      } catch {
+        // Ignore logout errors
       }
-    } catch {
-      return { ok: false, error: "Network error. Please try again." };
     }
-  }
-
-  async function verifyOTP(data: OTPVerifyData) {
-    try {
-      const res = await fetch(`${API_URL}/api/auth/otp/verify/`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-      if (res.ok) {
-        const responseData = await res.json();
-        if (responseData.tokens) {
-          localStorage.setItem("access_token", responseData.tokens.access);
-          localStorage.setItem("refresh_token", responseData.tokens.refresh);
-          setUser(responseData.user);
-        }
-        return { ok: true };
-      } else {
-        const responseData = await res.json().catch(() => null);
-        return { ok: false, error: responseData?.error || "OTP verification failed." };
-      }
-    } catch {
-      return { ok: false, error: "Network error. Please try again." };
-    }
-  }
-
-  function logout() {
+    
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
     setUser(null);
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, googleAuth, sendOTP, verifyOTP, logout }}>
+    <AuthContext.Provider value={{ user, loading, requestMagicLink, verifyMagicLink, updateProfile, logout }}>
       {children}
     </AuthContext.Provider>
   );
