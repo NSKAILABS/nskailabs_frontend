@@ -1,320 +1,266 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "About Us",
+  title: "About",
   description:
-    "Learn about NSKAILabs - India's first AI-assisted Photonics platform. Our mission spans AI-driven Photonic Design, Hail Prediction Systems, and Quantum Research.",
-  openGraph: {
-    title: "About NSKAILabs",
-    description:
-      "India's first AI-assisted Photonics platform. Pioneering photonic design, climate intelligence, and quantum research.",
-  },
+    "Learn about NSKAILabs - an open-source nanophotonics research community founded to make metasurface research accessible to everyone.",
 };
 
-const pillars = [
+const discordUrl = process.env.NEXT_PUBLIC_DISCORD_INVITE || "https://discord.gg/3adKwxNYw";
+const substackUrl = process.env.NEXT_PUBLIC_SUBSTACK_URL || "https://substack.com/@nskailabs";
+
+const whatWeDo = [
   {
-    title: "AI-Driven Photonic Design",
+    title: "Research Explanations",
     description:
-      "We're building India's first AI-assisted photonics platform, making advanced simulation and optimization accessible to researchers, students, and industry professionals.",
+      "Breaking down complex academic papers into accessible tutorials and explanations for students and researchers at all levels.",
     icon: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
       </svg>
     ),
-    gradient: "from-violet-500 to-fuchsia-500",
   },
   {
-    title: "Hail Prediction Systems",
+    title: "Open-Source Tools",
     description:
-      "Developing AI-powered hailstorm prediction models to protect agriculture and communities in Himachal Pradesh, where apple orchards are particularly vulnerable to hail damage.",
+      "Building and curating computational tools for photonics simulation, metasurface design, and optical analysis.",
     icon: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.25 15a4.5 4.5 0 004.5 4.5H18a3.75 3.75 0 001.332-7.257 3 3 0 00-3.758-3.848 5.25 5.25 0 00-10.233 2.33A4.502 4.502 0 002.25 15z" />
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
       </svg>
     ),
-    gradient: "from-cyan-500 to-blue-500",
   },
   {
-    title: "Quantum Research",
+    title: "Community Building",
     description:
-      "Exploring the frontiers of quantum computing and quantum photonics, pushing the boundaries of computational physics, cryptography, and fundamental science.",
+      "Connecting researchers, students, and enthusiasts worldwide through Discord discussions and collaborative projects.",
     icon: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
       </svg>
     ),
-    gradient: "from-emerald-500 to-teal-500",
   },
 ];
 
-const roadmap = [
+const getInvolved = [
   {
-    phase: "Phase 1",
-    title: "MetaOptics AI Launch",
-    description:
-      "Launch India's first AI-assisted photonic design platform. Establish core simulation and optimization capabilities.",
-    status: "Complete",
-    statusColor: "bg-emerald-500/20 text-emerald-400",
+    title: "Join Discord",
+    description: "Connect with the community, ask questions, and collaborate.",
+    href: discordUrl,
+    external: true,
+    color: "#5865F2",
+    icon: (
+      <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z" />
+      </svg>
+    ),
   },
   {
-    phase: "Phase 2",
-    title: "Hail Prediction Initiative",
-    description:
-      "Deploy AI models for hailstorm prediction in Himachal Pradesh. Partner with agricultural agencies and meteorological departments.",
-    status: "In Progress",
-    statusColor: "bg-cyan-500/20 text-cyan-400",
+    title: "Subscribe on Substack",
+    description: "Get updates on research, tutorials, and community news.",
+    href: substackUrl,
+    external: true,
+    color: "#FF6719",
+    icon: (
+      <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z" />
+      </svg>
+    ),
   },
   {
-    phase: "Phase 3",
-    title: "Quantum Research Program",
-    description:
-      "Establish quantum computing research initiatives. Explore quantum photonics applications and fundamental physics experiments.",
-    status: "Upcoming",
-    statusColor: "bg-violet-500/20 text-violet-400",
-  },
-  {
-    phase: "Phase 4",
-    title: "Bharat-Pro Education Platform",
-    description:
-      "Launch comprehensive AutoML training platform with explainable ML/DL modules for the next generation of AI practitioners.",
-    status: "Planned",
-    statusColor: "bg-gray-500/20 text-gray-400",
-  },
-];
-
-const values = [
-  {
-    title: "Innovation First",
-    description: "We push boundaries and challenge conventional approaches to solve real-world problems with cutting-edge technology.",
-  },
-  {
-    title: "Accessibility",
-    description: "Advanced technology should be accessible to all — from students to researchers to industry professionals.",
-  },
-  {
-    title: "Impact-Driven",
-    description: "Every project we undertake is measured by its real-world impact on communities, industries, and scientific progress.",
-  },
-  {
-    title: "Collaborative",
-    description: "We believe in the power of collaboration across disciplines, institutions, and borders to achieve breakthrough results.",
+    title: "GitHub",
+    description: "Contribute to our open-source projects and tools.",
+    href: "#",
+    external: false,
+    comingSoon: true,
+    color: "#6e7681",
+    icon: (
+      <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+      </svg>
+    ),
   },
 ];
 
-export default function About() {
+export default function AboutPage() {
   return (
     <div className="pt-16">
       {/* Hero Section */}
-      <section className="relative section-padding overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-violet-500/10 via-transparent to-cyan-500/10" />
-        <div className="absolute top-20 right-10 w-72 h-72 bg-violet-500/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-20 left-10 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-        
-        <div className="section-container relative">
+      <section className="section-padding">
+        <div className="section-container">
           <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-violet-500/20 to-cyan-500/20 border border-violet-500/30 mb-6">
-              <span className="text-sm font-medium text-cyan-300">🇮🇳 Made in India</span>
-            </div>
-            
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              About <span className="bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-transparent">NSKAILabs</span>
+              About <span className="gradient-text">NSKAILabs</span>
             </h1>
-            <p className="text-xl text-gray-300 mb-4">
-              India&apos;s First AI-Assisted Photonics Platform
-            </p>
-            <p className="text-lg text-gray-400">
-              We exist to democratize advanced technologies through innovation,
-              making AI-powered photonics, climate intelligence, and quantum research
-              accessible to everyone.
+            <p className="text-lg md:text-xl text-gray-400">
+              An open-source research community dedicated to making nanophotonics 
+              and metasurface research accessible to everyone.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Mission Statement */}
-      <section className="section-padding bg-gradient-to-br from-violet-950/30 via-dark-900 to-cyan-950/30">
+      {/* Mission Section */}
+      <section className="section-padding bg-dark-900/50">
         <div className="section-container">
           <div className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-dark-900/50 border border-violet-500/30 rounded-2xl p-8">
-                <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-violet-500/20 text-violet-400 mb-4">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                </div>
-                <h3 className="text-2xl font-bold text-white mb-3">Our Vision</h3>
-                <p className="text-gray-400 leading-relaxed">
-                  To be the pioneering force in democratizing AI-powered photonics, 
-                  climate intelligence, and quantum technologies — empowering researchers, 
-                  students, and industries across India and beyond.
-                </p>
-              </div>
-              
-              <div className="bg-dark-900/50 border border-cyan-500/30 rounded-2xl p-8">
-                <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-cyan-500/20 text-cyan-400 mb-4">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
-                  </svg>
-                </div>
-                <h3 className="text-2xl font-bold text-white mb-3">Our Mission</h3>
-                <p className="text-gray-400 leading-relaxed">
-                  Democratize AI & Photonics through education and automation. 
-                  Protect communities through climate intelligence. 
-                  Advance fundamental science through quantum research.
-                </p>
-              </div>
+            <h2 className="text-3xl font-bold text-white mb-6 text-center">
+              Our <span className="gradient-text">Mission</span>
+            </h2>
+            <div className="prose prose-lg prose-invert mx-auto">
+              <p className="text-gray-400 text-lg leading-relaxed mb-6">
+                Nanophotonics and metasurfaces represent one of the most exciting frontiers in 
+                modern physics and engineering. These ultrathin optical devices can manipulate 
+                light in ways that were once thought impossible — bending it at arbitrary angles, 
+                focusing it with unprecedented precision, and creating optical effects that 
+                challenge our intuitions about how light behaves.
+              </p>
+              <p className="text-gray-400 text-lg leading-relaxed mb-6">
+                Yet despite their revolutionary potential, these topics remain largely inaccessible 
+                to students and early-career researchers. Academic papers are dense, computational 
+                tools are scattered, and there&apos;s a lack of community spaces where people can 
+                learn together.
+              </p>
+              <p className="text-gray-400 text-lg leading-relaxed">
+                NSKAILabs exists to change that. We&apos;re building an open-source community where 
+                anyone can learn about metasurfaces, contribute to research explanations, and 
+                collaborate on tools that push the field forward.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Three Pillars */}
+      {/* What We Do Section */}
       <section className="section-padding">
         <div className="section-container">
-          <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-4">
-            Three Pillars of <span className="bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-transparent">Innovation</span>
+          <h2 className="text-3xl font-bold text-white mb-12 text-center">
+            What We <span className="gradient-text">Do</span>
           </h2>
-          <p className="text-gray-400 text-center mb-12 max-w-2xl mx-auto">
-            Our work spans three interconnected domains, each addressing critical challenges.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {pillars.map((item) => (
-              <div key={item.title} className="group relative bg-dark-900/50 border border-dark-700 rounded-2xl p-8 transition-all duration-500 hover:border-transparent hover:shadow-2xl hover:shadow-violet-500/10 overflow-hidden">
-                <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500`} />
-                <div className={`relative inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br ${item.gradient} text-white mb-6 group-hover:scale-110 transition-transform duration-300`}>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {whatWeDo.map((item) => (
+              <div key={item.title} className="card-dark text-center">
+                <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-primary-500/20 to-accent-500/20 text-primary-400 mb-4">
                   {item.icon}
                 </div>
-                <h3 className="relative text-xl font-semibold text-white mb-3">
-                  {item.title}
-                </h3>
-                <p className="relative text-gray-400">{item.description}</p>
+                <h3 className="text-xl font-semibold text-white mb-3">{item.title}</h3>
+                <p className="text-gray-400">{item.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Founder Story */}
+      {/* Founder Section */}
       <section className="section-padding bg-dark-900/50">
         <div className="section-container">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-8">
-              Our <span className="bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-transparent">Story</span>
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl font-bold text-white mb-12">
+              Meet the <span className="gradient-text">Founder</span>
             </h2>
-            <div className="bg-dark-900/50 border border-dark-700 rounded-2xl p-8">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-violet-500 to-cyan-400 flex items-center justify-center text-white text-xl font-bold">
-                  N
+            <div className="card-dark inline-block">
+              <div className="flex flex-col items-center p-4">
+                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center text-3xl font-bold text-white mb-4">
+                  DG
                 </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-white">
-                    Founded with Purpose
-                  </h3>
-                  <p className="text-sm text-gray-400">
-                    Student-Driven Innovation
-                  </p>
-                </div>
+                <h3 className="text-2xl font-bold text-white mb-1">Dishant Gupta</h3>
+                <p className="text-primary-400 font-medium mb-2">Founder, NSKAILabs</p>
+                <p className="text-gray-400 text-sm mb-4">
+                  Final Year B.Tech Physics<br />
+                  NIT Hamirpur
+                </p>
+                <p className="text-gray-400 text-sm max-w-md">
+                  Passionate about making cutting-edge physics research accessible to everyone. 
+                  Building NSKAILabs to create an open community around nanophotonics and metasurfaces.
+                </p>
               </div>
-              <p className="text-gray-300 mb-4">
-                NSKAILabs was born from a simple observation: the gap between
-                academic knowledge and real-world impact in AI and photonics is
-                enormous. Traditional tools for photonic design were inaccessible, 
-                AI education lacked practical depth, and critical challenges like 
-                climate prediction remained underserved.
-              </p>
-              <p className="text-gray-400 mb-4">
-                What started as a student-driven initiative has evolved into
-                India&apos;s first AI-assisted photonics platform. We&apos;ve since expanded 
-                our mission to include climate intelligence — specifically hail prediction 
-                systems for Himachal Pradesh&apos;s vulnerable apple orchards — and quantum 
-                research initiatives.
-              </p>
-              <p className="text-gray-400">
-                Today, we&apos;re building the technologies that will shape tomorrow: 
-                making advanced photonic design accessible, protecting agricultural 
-                communities from extreme weather, and pushing the boundaries of 
-                quantum science.
-              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Values */}
+      {/* Get Involved Section */}
       <section className="section-padding">
         <div className="section-container">
-          <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-12">
-            Our <span className="bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-transparent">Values</span>
+          <h2 className="text-3xl font-bold text-white mb-12 text-center">
+            Get <span className="gradient-text">Involved</span>
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
-            {values.map((value) => (
-              <div key={value.title} className="bg-dark-900/50 border border-dark-700 rounded-2xl p-6 transition-all duration-300 hover:border-violet-500/50">
-                <h3 className="text-lg font-semibold text-white mb-2">{value.title}</h3>
-                <p className="text-sm text-gray-400">{value.description}</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            {getInvolved.map((item) => (
+              <div
+                key={item.title}
+                className="bg-dark-900/50 border border-dark-700 rounded-xl p-6 hover:border-opacity-50 transition-colors"
+                style={{ borderColor: item.comingSoon ? undefined : `${item.color}30` }}
+              >
+                <div
+                  className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
+                  style={{ backgroundColor: `${item.color}20`, color: item.color }}
+                >
+                  {item.icon}
+                </div>
+                <h3 className="text-lg font-semibold text-white mb-2 flex items-center gap-2">
+                  {item.title}
+                  {item.comingSoon && (
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-gray-700 text-gray-400">
+                      Coming Soon
+                    </span>
+                  )}
+                </h3>
+                <p className="text-gray-400 text-sm mb-4">{item.description}</p>
+                {!item.comingSoon && (
+                  <a
+                    href={item.href}
+                    target={item.external ? "_blank" : undefined}
+                    rel={item.external ? "noopener noreferrer" : undefined}
+                    className="inline-flex items-center gap-2 text-sm font-medium transition-colors"
+                    style={{ color: item.color }}
+                  >
+                    {item.title.includes("Discord") ? "Join Server" : "Subscribe"}
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </a>
+                )}
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Roadmap */}
+      {/* Contact Section */}
       <section className="section-padding bg-dark-900/50">
         <div className="section-container">
-          <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-12">
-            <span className="bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-transparent">Roadmap</span>
-          </h2>
-          <div className="max-w-3xl mx-auto space-y-6">
-            {roadmap.map((item, index) => (
-              <div key={item.phase} className="relative bg-dark-900/50 border border-dark-700 rounded-2xl p-6 transition-all duration-300 hover:border-violet-500/50">
-                {index < roadmap.length - 1 && (
-                  <div className="absolute left-10 top-full w-px h-6 bg-gradient-to-b from-violet-500/50 to-transparent" />
-                )}
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-16 h-16 rounded-xl bg-gradient-to-br from-violet-500/20 to-cyan-500/20 flex items-center justify-center">
-                    <span className="text-sm font-bold text-violet-400">
-                      {item.phase.replace("Phase ", "0")}
-                    </span>
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-xl font-semibold text-white">
-                        {item.title}
-                      </h3>
-                      <span className={`text-xs px-2 py-1 rounded-full ${item.statusColor}`}>
-                        {item.status}
-                      </span>
-                    </div>
-                    <p className="text-gray-400">{item.description}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="section-padding">
-        <div className="section-container">
-          <div className="relative bg-gradient-to-br from-violet-950/50 to-cyan-950/50 border border-violet-500/30 rounded-3xl p-12 text-center overflow-hidden">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-violet-500/10 via-transparent to-transparent" />
-            <div className="relative">
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                Join Our Mission
-              </h2>
-              <p className="text-gray-400 mb-8 max-w-xl mx-auto">
-                Whether you&apos;re a researcher, student, or industry professional, 
-                there&apos;s a place for you in our journey to democratize advanced technologies.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="/product" className="inline-flex items-center justify-center px-8 py-4 rounded-xl bg-gradient-to-r from-violet-600 to-cyan-500 text-white font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/25 hover:scale-105">
-                  Explore MetaOptics AI
-                </a>
-                <a href="/contact" className="inline-flex items-center justify-center px-8 py-4 rounded-xl border border-violet-500/50 text-violet-300 font-semibold hover:bg-violet-500/10 transition-all duration-300">
-                  Get in Touch
-                </a>
-              </div>
+          <div className="max-w-2xl mx-auto text-center">
+            <h2 className="text-3xl font-bold text-white mb-4">
+              Get in <span className="gradient-text">Touch</span>
+            </h2>
+            <p className="text-gray-400 mb-8">
+              Have questions or want to collaborate? Reach out through our community channels.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href={discordUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-[#5865F2] text-white font-semibold hover:bg-[#4752C4] transition-colors"
+              >
+                <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z" />
+                </svg>
+                Ask on Discord
+              </a>
+              <a
+                href={substackUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center px-6 py-3 rounded-xl border border-[#FF6719]/50 text-[#FF6719] font-semibold hover:bg-[#FF6719]/10 transition-colors"
+              >
+                <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z" />
+                </svg>
+                Follow on Substack
+              </a>
             </div>
           </div>
         </div>

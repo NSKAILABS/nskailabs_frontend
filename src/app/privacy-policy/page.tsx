@@ -2,143 +2,103 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "NSKAILabs Privacy Policy - how we collect, use, and protect your personal information.",
+  description: "NSKAILabs privacy policy - how we collect, use, and protect your information.",
 };
 
-export default function PrivacyPolicy() {
+export default function PrivacyPolicyPage() {
   return (
-    <div className="pt-16">
-      <section className="relative section-padding overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-transparent to-cyan-500/10" />
-        <div className="section-container relative">
-          <h1 className="text-4xl md:text-5xl font-bold text-white text-center mb-6">
-            Privacy <span className="gradient-text">Policy</span>
-          </h1>
-          <p className="text-gray-400 text-center">
-            Last updated: January 2025
-          </p>
-        </div>
-      </section>
+    <div className="pt-16 min-h-screen">
+      <div className="section-container section-padding">
+        <div className="max-w-3xl mx-auto">
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-6">Privacy Policy</h1>
+          <p className="text-gray-400 mb-8">Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
 
-      <section className="section-padding">
-        <div className="section-container">
-          <div className="max-w-3xl mx-auto prose-dark space-y-8">
-            <div>
-              <h2 className="text-2xl font-semibold text-white mb-4">
-                1. Introduction
-              </h2>
-              <p className="text-gray-400 leading-relaxed">
-                NSKAILabs (&ldquo;we,&rdquo; &ldquo;our,&rdquo; or &ldquo;us&rdquo;) is committed to protecting
-                your privacy. This Privacy Policy explains how we collect, use,
-                disclose, and safeguard your information when you visit our
-                website and use our services, including the Photonic AI Software
-                and Bharat-Pro platform.
-              </p>
-            </div>
+          <div className="prose prose-invert prose-gray max-w-none">
+            <div className="space-y-8">
+              <section>
+                <h2 className="text-xl font-semibold text-white mb-3">1. Information We Collect</h2>
+                <p className="text-gray-400">
+                  We collect information you provide directly to us, such as when you create an account, 
+                  update your profile, or communicate with us. This may include:
+                </p>
+                <ul className="list-disc list-inside text-gray-400 mt-3 space-y-1">
+                  <li>Email address</li>
+                  <li>Name and profile information</li>
+                  <li>Institution and research interests</li>
+                  <li>Any other information you choose to provide</li>
+                </ul>
+              </section>
 
-            <div>
-              <h2 className="text-2xl font-semibold text-white mb-4">
-                2. Information We Collect
-              </h2>
-              <p className="text-gray-400 leading-relaxed mb-3">
-                We may collect information about you in a variety of ways:
-              </p>
-              <ul className="space-y-2 text-gray-400">
-                <li className="flex items-start gap-2">
-                  <span className="text-indigo-400 mt-1">--</span>
-                  <span>Personal Data: Name, email address, phone number, organization, and other contact details you provide.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-indigo-400 mt-1">--</span>
-                  <span>Usage Data: Information about how you use our website and services, including pages visited and features used.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-indigo-400 mt-1">--</span>
-                  <span>Technical Data: IP address, browser type, device information, and cookies.</span>
-                </li>
-              </ul>
-            </div>
+              <section>
+                <h2 className="text-xl font-semibold text-white mb-3">2. How We Use Your Information</h2>
+                <p className="text-gray-400">
+                  We use the information we collect to:
+                </p>
+                <ul className="list-disc list-inside text-gray-400 mt-3 space-y-1">
+                  <li>Provide, maintain, and improve our services</li>
+                  <li>Send you technical notices and support messages</li>
+                  <li>Communicate with you about research updates and community news</li>
+                  <li>Protect against abuse and unauthorized access</li>
+                </ul>
+              </section>
 
-            <div>
-              <h2 className="text-2xl font-semibold text-white mb-4">
-                3. How We Use Your Information
-              </h2>
-              <p className="text-gray-400 leading-relaxed mb-3">
-                We use the information we collect to:
-              </p>
-              <ul className="space-y-2 text-gray-400">
-                <li className="flex items-start gap-2">
-                  <span className="text-indigo-400 mt-1">--</span>
-                  <span>Provide, maintain, and improve our services</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-indigo-400 mt-1">--</span>
-                  <span>Process transactions and send related information</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-indigo-400 mt-1">--</span>
-                  <span>Send you technical notices, updates, and support messages</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-indigo-400 mt-1">--</span>
-                  <span>Respond to your comments, questions, and requests</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-indigo-400 mt-1">--</span>
-                  <span>Monitor and analyze trends, usage, and activities</span>
-                </li>
-              </ul>
-            </div>
+              <section>
+                <h2 className="text-xl font-semibold text-white mb-3">3. Information Sharing</h2>
+                <p className="text-gray-400">
+                  We do not sell, trade, or rent your personal information to third parties. We may share 
+                  your information only in the following circumstances:
+                </p>
+                <ul className="list-disc list-inside text-gray-400 mt-3 space-y-1">
+                  <li>With your consent or at your direction</li>
+                  <li>To comply with legal obligations</li>
+                  <li>To protect our rights, privacy, safety, or property</li>
+                </ul>
+              </section>
 
-            <div>
-              <h2 className="text-2xl font-semibold text-white mb-4">
-                4. Data Security
-              </h2>
-              <p className="text-gray-400 leading-relaxed">
-                We implement appropriate technical and organizational security
-                measures to protect your personal information. However, no
-                electronic transmission over the Internet or information storage
-                technology can be guaranteed to be 100% secure.
-              </p>
-            </div>
+              <section>
+                <h2 className="text-xl font-semibold text-white mb-3">4. Data Security</h2>
+                <p className="text-gray-400">
+                  We take reasonable measures to help protect your personal information from loss, theft, 
+                  misuse, and unauthorized access. However, no method of transmission over the Internet 
+                  is 100% secure.
+                </p>
+              </section>
 
-            <div>
-              <h2 className="text-2xl font-semibold text-white mb-4">
-                5. Data Retention
-              </h2>
-              <p className="text-gray-400 leading-relaxed">
-                We will retain your personal information only for as long as is
-                necessary for the purposes set out in this Privacy Policy. We
-                will retain and use your information to the extent necessary to
-                comply with our legal obligations, resolve disputes, and enforce
-                our policies.
-              </p>
-            </div>
+              <section>
+                <h2 className="text-xl font-semibold text-white mb-3">5. Your Rights</h2>
+                <p className="text-gray-400">
+                  You may update, correct, or delete your account information at any time by logging 
+                  into your dashboard. You may also request deletion of your account by contacting us.
+                </p>
+              </section>
 
-            <div>
-              <h2 className="text-2xl font-semibold text-white mb-4">
-                6. Your Rights
-              </h2>
-              <p className="text-gray-400 leading-relaxed">
-                You have the right to access, update, or delete your personal
-                information at any time. You may also opt out of receiving
-                marketing communications from us. To exercise these rights,
-                please contact us at contact@nskailabs.com.
-              </p>
-            </div>
+              <section>
+                <h2 className="text-xl font-semibold text-white mb-3">6. Cookies</h2>
+                <p className="text-gray-400">
+                  We use cookies and similar technologies to maintain your session and remember your 
+                  preferences. You can control cookies through your browser settings.
+                </p>
+              </section>
 
-            <div>
-              <h2 className="text-2xl font-semibold text-white mb-4">
-                7. Contact Us
-              </h2>
-              <p className="text-gray-400 leading-relaxed">
-                If you have questions about this Privacy Policy, please contact
-                us at contact@nskailabs.com.
-              </p>
+              <section>
+                <h2 className="text-xl font-semibold text-white mb-3">7. Changes to This Policy</h2>
+                <p className="text-gray-400">
+                  We may update this privacy policy from time to time. We will notify you of any 
+                  changes by posting the new policy on this page and updating the date above.
+                </p>
+              </section>
+
+              <section>
+                <h2 className="text-xl font-semibold text-white mb-3">8. Contact Us</h2>
+                <p className="text-gray-400">
+                  If you have any questions about this privacy policy, please contact us through our 
+                  Discord community or via email.
+                </p>
+              </section>
             </div>
           </div>
         </div>
-      </section>
+      </div>
     </div>
   );
 }

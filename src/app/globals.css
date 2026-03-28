@@ -9,24 +9,33 @@
 
   body {
     @apply bg-dark-950 text-gray-300 antialiased;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   }
 
   ::selection {
-    @apply bg-indigo-500/30 text-white;
+    @apply bg-primary-500/30 text-white;
   }
 }
 
 @layer components {
   .gradient-text {
-    @apply bg-gradient-to-r from-indigo-500 to-cyan-400 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-primary-500 to-accent-500 bg-clip-text text-transparent;
   }
 
   .gradient-btn {
-    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg bg-gradient-to-r from-indigo-500 to-cyan-400 text-white font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/25 hover:scale-105;
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg bg-gradient-to-r from-primary-500 to-accent-500 text-white font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-primary-500/25 hover:scale-105;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg bg-primary-500 text-white font-semibold transition-all duration-300 hover:bg-primary-600 hover:shadow-lg hover:shadow-primary-500/25;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg border border-primary-500/50 text-primary-400 font-semibold hover:bg-primary-500/10 transition-all duration-300;
   }
 
   .card-dark {
-    @apply bg-dark-900 border border-dark-700 rounded-xl p-6 transition-all duration-300 hover:border-indigo-500/50 hover:shadow-lg hover:shadow-indigo-500/10;
+    @apply bg-dark-900/50 border border-dark-700 rounded-xl p-6 transition-all duration-300 hover:border-primary-500/50 hover:shadow-lg hover:shadow-primary-500/10;
   }
 
   .section-container {

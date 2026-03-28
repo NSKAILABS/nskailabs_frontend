@@ -2,8 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from "react";
 
-// API URL from environment variable - points to Django backend
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.nskailabs.com";
 
 interface User {
   id: number;
@@ -14,14 +13,8 @@ interface User {
   profile?: {
     bio: string;
     institution: string;
-    department: string;
     research_interests: string[];
     website: string;
-    google_scholar: string;
-    orcid: string;
-    avatar_url: string;
-    twitter: string;
-    linkedin: string;
     is_contributor: boolean;
   };
 }
@@ -40,13 +33,8 @@ interface ProfileUpdateData {
   last_name?: string;
   bio?: string;
   institution?: string;
-  department?: string;
   research_interests?: string[];
   website?: string;
-  google_scholar?: string;
-  orcid?: string;
-  twitter?: string;
-  linkedin?: string;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -196,7 +184,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const token = localStorage.getItem("access_token");
     const refresh = localStorage.getItem("refresh_token");
     
-    // Call logout endpoint to blacklist the refresh token
     if (token && refresh) {
       try {
         await fetch(`${API_URL}/api/auth/logout/`, {

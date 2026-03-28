@@ -1,20 +1,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Enable React strict mode for development
   reactStrictMode: true,
 
-  // Image optimization configuration
   images: {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '*.hf.space',
+        hostname: '*.nskailabs.com',
         pathname: '/**',
       },
     ],
   },
 
-  // Security headers
   async headers() {
     return [
       {
@@ -44,55 +41,18 @@ const nextConfig = {
             key: 'Referrer-Policy',
             value: 'strict-origin-when-cross-origin',
           },
-          {
-            key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=()',
-          },
-        ],
-      },
-      // Special CSP for product page to allow MetaOptics iframe
-      {
-        source: '/product',
-        headers: [
-          {
-            key: 'Content-Security-Policy',
-            value: [
-              "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
-              "style-src 'self' 'unsafe-inline'",
-              "img-src 'self' data: https: blob:",
-              "font-src 'self' data:",
-              "connect-src 'self' https://*.hf.space " + (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'),
-              "frame-src 'self' https://*.hf.space https://dghfngbdfvxc-metaopticsai-license-server.hf.space",
-              "frame-ancestors 'self'",
-            ].join('; '),
-          },
         ],
       },
     ];
   },
 
-  // Environment variables that should be available client-side
   env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000',
-    NEXT_PUBLIC_METAOPTICS_URL: process.env.NEXT_PUBLIC_METAOPTICS_URL || 'https://dghfngbdfvxc-metaopticsai-license-server.hf.space/',
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'https://api.nskailabs.com',
+    NEXT_PUBLIC_DISCORD_INVITE: process.env.NEXT_PUBLIC_DISCORD_INVITE || 'https://discord.gg/3adKwxNYw',
+    NEXT_PUBLIC_SUBSTACK_URL: process.env.NEXT_PUBLIC_SUBSTACK_URL || 'https://substack.com/@nskailabs',
   },
 
-  // Redirect configuration
-  async redirects() {
-    return [
-      // Redirect /products to /product
-      {
-        source: '/products',
-        destination: '/product',
-        permanent: true,
-      },
-    ];
-  },
-
-  // Enable experimental features if needed
   experimental: {
-    // Enable server actions
     serverActions: {
       allowedOrigins: ['localhost:3000', 'nskailabs.com', 'www.nskailabs.com'],
     },
